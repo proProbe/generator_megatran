@@ -1,0 +1,26 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'link' ]
+2 info using npm@2.7.4
+3 info using node@v0.13.0-pre
+4 verbose linkPkg /home/huy/workspace/test_generator/generator-test-generator
+5 silly gentlyRm /usr/local/lib/node_modules/generator-test-generator is being purged
+6 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/generator-test-generator
+7 silly vacuum-fs purging /usr/local/lib/node_modules/generator-test-generator
+8 verbose stack Error: EACCES, unlink '/usr/local/lib/node_modules/generator-test-generator'
+8 verbose stack     at Error (native)
+9 verbose cwd /home/huy/workspace/test_generator/generator-test-generator/generators/controller
+10 error Linux 3.13.0-53-generic
+11 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "link"
+12 error node v0.13.0-pre
+13 error npm  v2.7.4
+14 error path /usr/local/lib/node_modules/generator-test-generator
+15 error code EACCES
+16 error errno -13
+17 error Error: EACCES, unlink '/usr/local/lib/node_modules/generator-test-generator'
+17 error     at Error (native)
+17 error  { [Error: EACCES, unlink '/usr/local/lib/node_modules/generator-test-generator']
+17 error   errno: -13,
+17 error   code: 'EACCES',
+17 error   path: '/usr/local/lib/node_modules/generator-test-generator' }
+18 error Please try running this command again as root/Administrator.
+19 verbose exit [ -13, true ]

@@ -1,0 +1,12 @@
+{
+  "name": "<%= site_name %>",
+  "description": "<%= site_description %>",
+  "version": "0.0.1",
+  "dependencies": {
+      "bootstrap": "~3.3.4",
+      "jquery": "~2.1.4",
+      "angular": "~1.4.0",
+      "angular-route": "~1.4.7"
+  }
+}
+
