@@ -1,0 +1,62 @@
+<html ng-app="App" ng-controller="MainController as main">
+<head>
+    <title>Bismuth</title>
+    <link href="libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+    <link href="css/lightbox.css" rel="stylesheet">
+</head>
+<body>
+        <div id="wrapper">
+
+        <div id="navbar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#/">
+                        Bismuth
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li ng-class="{active:main.isActive('/tavlor')}">
+                    <a href="#/tavlor" ng-click="main.setPage(this);">Tavlor</a>
+                </li>
+                <li ng-class="{active:main.isActive('/vaskor')}">
+                    <a href="#/vaskor">Väskor</a>
+                </li>
+                <li ng-class="{active:main.isActive('/blommor')}">
+                    <a href="#/blommor">Blommor</a>
+                </li>
+                <li ng-class="{active:main.isActive('/resor')}">
+                    <a href="#/resor">Resor</a>
+                </li>
+
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div ng-view>
+
+            </div>
+
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <script src="libs/jquery/dist/jquery.min.js"></script>
+    <script src="libs/angular/angular.min.js"></script>
+    <script src="libs/angular-route/angular-route.min.js"></script>
+    <script src="libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="libs/lightbox/lightbox.min.js"></script>
+    <script src="app.js"></script>
+    <script src="controllers/homeController.js"></script>
+    <script src="controllers/blommorController.js"></script>
+	<script src="controllers/tavlorController.js"></script>
+	<!-- Placeholder:NewSrc -->
+</body>
+</html>

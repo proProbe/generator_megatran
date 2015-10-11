@@ -1,0 +1,12 @@
+{
+  "name": "Bismuth",
+  "description": "App for showing the artistic side of Ida Palm",
+  "version": "0.0.1",
+  "dependencies": {
+      "bootstrap": "~3.3.4",
+      "jquery": "~2.1.4",
+      "angular": "~1.4.0",
+      "angular-route": "~1.4.7"
+  }
+}
+
