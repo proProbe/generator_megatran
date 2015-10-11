@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 
 //	Set port to 3000 if no port is specified.
 var port = process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3000;
+var ip = process.env.OPENSHIFT_NODEJS_IP||"127.0.0.1";
 
 
 /*
@@ -29,7 +30,7 @@ app.use('/', express.static(__dirname + '/public'));
 
 
 //	Initiate the app.
-app.listen(port);
+app.listen(port, ip);
 
 console.log('Current App name: ' + 'Bismuth');
 console.log('Listening to port ' + port);

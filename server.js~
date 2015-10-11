@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 
 //	Set port to 3000 if no port is specified.
-var port = process.env.PORT||8080;
+var port = process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3000;
 
 
 /*
