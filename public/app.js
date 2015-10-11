@@ -31,6 +31,10 @@ app.config(['$routeProvider', function($routeProvider){
 		templateUrl:'views/resor.view.html',
 		controller:'insertController'
 	})
+	.when('/admin', {
+		templateUrl:'views/admin.view.html',
+		controller:'insertController'
+	})
 	//Placeholder:NewRoute
 	.otherwise({redirectTo: '/'});
 }]);
