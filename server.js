@@ -77,7 +77,7 @@ app.get('/img/:category', function(req, res){
 app.post('/upload', function(req, res){
 
 	var form = new formidable.IncomingForm({
-		uploadDir: process.env.OPENSHIFT_TMP_DIR
+		uploadDir: fileFolder
 	});
 	// console.log(form.path);
 	var tempPath;
