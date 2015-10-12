@@ -72,8 +72,10 @@ app.get('/img/:category', function(req, res){
 
 app.post('/upload', function(req, res){
 
-	var form = new formidable.IncomingForm();
-	form.path = __dirname + "/imgs/";
+	var form = new formidable.IncomingForm({
+		uploadDir: __dirname + "/imgs"
+	});
+	// console.log(form.path);
 	var tempPath;
 	var title;
 	var category;
@@ -81,6 +83,7 @@ app.post('/upload', function(req, res){
 		tempPath = files.file.path;
 		title = fields.title;
 		category = fields.category;
+		form.name = title;
 	});
 	form.on('end', function(){
 		var newPath = __dirname + '/imgs/' + category +  '/' + title;
