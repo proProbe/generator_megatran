@@ -17,7 +17,7 @@ var mongoose = require('mongoose');
 var port = process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3000;
 var ip = process.env.OPENSHIFT_NODEJS_IP||"127.0.0.1";
 
-var mongoURL = 'mongodb://127.0.0.1:27017';
+var mongoURL = 'mongodb://127.0.0.1:27017/bismuth';
 if(process.env.OPENSHIFT_MONGODB_DB_HOST){
 	mongoURL = "mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/";
 }
@@ -35,18 +35,37 @@ mongoose.connect(mongoURL, function(err){
 */
 process.on('SIGINT', function() {
 	console.log('\nClosed app');
+	mongoose.connection.close(function(){
+		console.log('Closed connection to mongodb');
+	});
 	process.exit(0);
 });
+
+var imgModel = require('./models/img.model.js');
 
 
 //	Send static files when requested
 app.use('/', express.static(__dirname + '/public'));
 
 app.get('/img/:category/:file', function(req, res){
-	res.sendFile(__dirname + '/imgs/tavlor/test1.jpg' );
+	res.sendFile(__dirname + '/imgs/'+req.params.category+'/'+req.params.file );
 });
 
-app.post('/img', function(req, res){
+app.get('/img', function(req, res){
+	imgModel.find().lean().exec(function(err, imgs){
+		if(err){throw err;}
+		return res.status(200).json(imgs);
+	});
+});
+
+app.get('/img/:category', function(req, res){
+	imgModel.find({category:req.params.category}).lean().exec(function(err, imgs){
+		if(err){throw err;}
+		return res.status(200).json(imgs);
+	});
+});
+
+app.post('/upload', function(req, res){
 
 	var form = new formidable.IncomingForm();
 	var tempPath;
@@ -58,13 +77,24 @@ app.post('/img', function(req, res){
 		category = fields.category;
 	});
 	form.on('end', function(){
-		fs.rename(tempPath, __dirname + '/imgs/' + category +  '/' + title, function(err){
+		var newPath = __dirname + '/imgs/' + category +  '/' + title;
+		fs.rename(tempPath, newPath, function(err){
 			if(err){
 				throw err;
 			}
+		});
+		var img = new imgModel({
+			category:category,
+			title:title,
+			path: '/img/' + category + '/' + title,
+			description:"Test pictures"
+		});
+		img.save(function(err, img){
+			if(err){throw err;}
 			res.status(200).send({message:"Saved image"});
 		});
 	});
+
 });
 
 //	Initiate the app.

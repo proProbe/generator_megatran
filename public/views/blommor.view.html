@@ -1,35 +1,9 @@
 <div class="col-sm-12" id="blommor.view">
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-3">
-				<a href="assets/img/img1.jpg" data-lightbox="flower">
-					<img src="assets/img/img1.jpg" width="250px" class="img-rounded">
-				</a>
-			</div>
-			<div class="col-md-3">
-				<a href="assets/img/img2.jpg" data-lightbox="flower">
-					<img src="assets/img/img2.jpg" width="250px" class="img-rounded">
-				</a>
-			</div>
-			<div class="col-md-3">
-				<a href="assets/img/img3.jpg" data-lightbox="flower">
-					<img src="assets/img/img3.jpg" width="250px" class="img-rounded">
-				</a>
-			</div>
-			<div class="col-md-3">
-				<a href="assets/img/img4.jpg" data-lightbox="flower">
-					<img src="assets/img/img4.jpg" width="250px" class="img-rounded">
-				</a>
-			</div>
-		</div>
-
-		<div class="row">
-
-			<div class="col-md-3">
-				<a href="assets/img/img5.jpg" data-lightbox="flower">
-					<img src="assets/img/img5.jpg" width="250px" class="img-rounded">
-				</a>
-			</div>
+		<div class="col-md-3" ng-repeat="img in imgs">
+			<a href="{{img.path}}" data-lightbox="painting-set">
+				<img src="{{img.path}}" width="250px" class="img-rounded">
+			</a>
 		</div>
 	</div>
 </div>
