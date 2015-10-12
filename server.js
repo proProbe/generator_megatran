@@ -17,14 +17,16 @@ var mongoose = require('mongoose');
 var port = process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3000;
 var ip = process.env.OPENSHIFT_NODEJS_IP||"127.0.0.1";
 
-var mongoURL = 'mongodb://127.0.0.1:27017/bismuth';
-var options = {};
-if(process.env.OPENSHIFT_MONGODB_DB_HOST){
-	mongoURL = "mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/";
-	options.user = "admin";
-	options.pass = "yXK2bNnNWEUg";
+var connection_string = 'mongodb://127.0.0.1:27017/bismuth';
+// if OPENSHIFT env variables are present, use the available connection info:
+if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
+  connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+  process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+  process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+  process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+  process.env.OPENSHIFT_APP_NAME;
 }
-mongoose.connect(mongoURL, options, function(err){
+mongoose.connect(connection_string, function(err){
 	if(err){
 		console.log('mongodb connection error', err);
 	}else{
