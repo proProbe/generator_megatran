@@ -4,6 +4,9 @@ var app = angular.module('App',[
 	'homeController',
 	'blommorController',
 	'tavlorController',
+	'vaskorController',
+	'resorController',
+	'adminController',
 	//Placeholder:NewModule
 	]);
 
@@ -21,19 +24,19 @@ app.config(['$routeProvider', function($routeProvider){
 
 	.when('/tavlor', {
 		templateUrl:'views/tavlor.view.html',
-		controller:'insertController'
+		controller:'tavlorController'
 	})
 	.when('/vaskor', {
 		templateUrl:'views/vaskor.view.html',
-		controller:'insertController'
+		controller:'vaskorController'
 	})
 	.when('/resor', {
 		templateUrl:'views/resor.view.html',
-		controller:'insertController'
+		controller:'resorController'
 	})
 	.when('/admin', {
 		templateUrl:'views/admin.view.html',
-		controller:'insertController'
+		controller:'adminController'
 	})
 	//Placeholder:NewRoute
 	.otherwise({redirectTo: '/'});

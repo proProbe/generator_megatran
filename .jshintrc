@@ -8,7 +8,6 @@
   "noarg": true,
   "undef": true,
   "unused": true,
-  "strict": true,
   "globals": {
     "angular": false,
     "$": false

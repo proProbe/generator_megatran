@@ -3,6 +3,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var fs = require('fs');
 
 
 //	Set all the middleware.
@@ -28,6 +29,19 @@ process.on('SIGINT', function() {
 //	Send static files when requested
 app.use('/', express.static(__dirname + '/public'));
 
+app.post('/img', function(req, res){
+	console.log(req.body);
+	var body = '';
+	var filepath = __dirname + '/test.jpg';
+	req.on('data', function(data){
+		body += data;
+	});
+	req.on('end', function(){
+		fs.writeFile(filepath, body, function(){
+			res.end();
+		});
+	});
+});
 
 //	Initiate the app.
 app.listen(port, ip);
