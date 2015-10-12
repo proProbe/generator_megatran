@@ -18,10 +18,13 @@ var port = process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3000;
 var ip = process.env.OPENSHIFT_NODEJS_IP||"127.0.0.1";
 
 var mongoURL = 'mongodb://127.0.0.1:27017/bismuth';
+var options = {};
 if(process.env.OPENSHIFT_MONGODB_DB_HOST){
 	mongoURL = "mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/";
+	options.user = "admin";
+	options.pass = "yXK2bNnNWEUg";
 }
-mongoose.connect(mongoURL, function(err){
+mongoose.connect(mongoURL, options, function(err){
 	if(err){
 		console.log('mongodb connection error', err);
 	}else{
