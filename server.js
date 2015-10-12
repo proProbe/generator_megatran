@@ -47,13 +47,17 @@ process.on('SIGINT', function() {
 });
 
 var imgModel = require('./models/img.model.js');
+var fileFolder = __dirname;
+if(process.env.OPENSHIFT_DATA_DIR){
+	fileFolder = process.env.OPENSHIFT_DATA_DIR;
 
+}
 
 //	Send static files when requested
 app.use('/', express.static(__dirname + '/public'));
 
 app.get('/img/:category/:file', function(req, res){
-	res.sendFile(__dirname + '/imgs/'+req.params.category+'/'+req.params.file );
+	res.sendFile(fileFolder + '/imgs/'+req.params.category+'/'+req.params.file );
 });
 
 app.get('/img', function(req, res){
@@ -73,7 +77,7 @@ app.get('/img/:category', function(req, res){
 app.post('/upload', function(req, res){
 
 	var form = new formidable.IncomingForm({
-		uploadDir: __dirname + "/imgs"
+		uploadDir: process.env.OPENSHIFT_TMP_DIR
 	});
 	// console.log(form.path);
 	var tempPath;
@@ -86,7 +90,14 @@ app.post('/upload', function(req, res){
 		form.name = title;
 	});
 	form.on('end', function(){
-		var newPath = __dirname + '/imgs/' + category +  '/' + title;
+		var newPath = fileFolder + '/imgs/' + category +  '/' + title;
+		var pdir = fileFolder + '/imgs';
+		if(!fs.existsSync(pdir)){
+			fs.mkdirSync(pdir);
+		}
+		if(!fs.existsSync(fileFolder + '/imgs/' + category)){
+			fs.mkdirSync(fileFolder + '/imgs/' + category);
+		}
 		fs.rename(tempPath, newPath, function(err){
 			if(err){
 				return console.log(err);
