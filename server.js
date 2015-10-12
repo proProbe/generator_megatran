@@ -5,7 +5,8 @@ var app = express();
 // var bodyParser = require('body-parser');
 var fs = require('fs');
 var formidable = require('formidable');
-var util = require('util');
+var mongoose = require('mongoose');
+// var util = require('util');
 
 //	Set all the middleware.
 // app.use(bodyParser.urlencoded({extended:true}));
@@ -16,6 +17,17 @@ var util = require('util');
 var port = process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3000;
 var ip = process.env.OPENSHIFT_NODEJS_IP||"127.0.0.1";
 
+var mongoURL = 'mongodb://127.0.0.1:27017';
+if(process.env.OPENSHIFT_MONGODB_DB_HOST){
+	mongoURL = "mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/";
+}
+mongoose.connect(mongoURL, function(err){
+	if(err){
+		console.log('mongodb connection error', err);
+	}else{
+		console.log('mongodb connection successful!');
+	}
+});
 
 /*
 	Close the process when exiting the server.
@@ -30,40 +42,29 @@ process.on('SIGINT', function() {
 //	Send static files when requested
 app.use('/', express.static(__dirname + '/public'));
 
+app.get('/img/:category/:file', function(req, res){
+	res.sendFile(__dirname + '/imgs/tavlor/test1.jpg' );
+});
+
 app.post('/img', function(req, res){
 
 	var form = new formidable.IncomingForm();
-	form.uploadDir = __dirname;
 	var tempPath;
 	var title;
+	var category;
 	form.parse(req, function(err, fields, files){
 		tempPath = files.file.path;
 		title = fields.title;
-		// console.log(files);
+		category = fields.category;
 	});
 	form.on('end', function(){
-		fs.rename(tempPath, __dirname + '/' + title, function(err){
+		fs.rename(tempPath, __dirname + '/imgs/' + category +  '/' + title, function(err){
 			if(err){
 				throw err;
 			}
+			res.status(200).send({message:"Saved image"});
 		});
 	});
-	// req.pipe(fs.createWriteStream(__dirname+'/test2.jpg'));
-	// console.log(req.data);
-	// fs.writeFile(__dirname+'/test3.jpg', req.data, function(){
-
-	// });
-	// console.log(req.body);
-	// var body = '';
-	// var filepath = __dirname + '/test.jpg';
-	// req.on('data', function(data){
-		
-	// });
-	// req.on('end', function(){
-	// 	fs.writeFile(filepath, body, function(){
-	// 		res.end();
-	// 	});
-	// });
 });
 
 //	Initiate the app.
