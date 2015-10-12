@@ -26,7 +26,7 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
   process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
   process.env.OPENSHIFT_APP_NAME;
 }
-mongoose.connect(connection_string, function(err){
+mongoose.connect('mongodb://'+connection_string, function(err){
 	if(err){
 		console.log('mongodb connection error', err);
 	}else{
