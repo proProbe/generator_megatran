@@ -10,20 +10,4 @@ adminController.controller('adminController', ['$scope', '$http', function($scop
 			$scope.success = false;
 		}
 	};
-	$scope.uploadFile = function(){
-		$(function(){
-			var files = $('#upload').get(0).files[0];
-			console.log(files);
-			$http(
-				{
-					method:'POST',
-					url:"/img",
-					headers:{
-						'Content-Type': 'multipart/form-data'
-					},
-					data:files
-				}
-			);
-		});
-	};
 }]);
