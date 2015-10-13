@@ -4,6 +4,12 @@ body:after {
   display: none;
 }
 
+.grid-item {
+  width: 200px;
+  margin: 30px;
+  float: left;
+}
+
 .lightboxOverlay {
   position: absolute;
   top: 0;

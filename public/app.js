@@ -40,6 +40,7 @@ app.config(['$routeProvider', function($routeProvider){
 	})
 	//Placeholder:NewRoute
 	.otherwise({redirectTo: '/'});
+
 }]);
 
 app.controller('MainController', ['$location', function($location){

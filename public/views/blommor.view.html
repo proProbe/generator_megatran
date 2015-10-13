@@ -1,9 +1,12 @@
 <div class="col-sm-12" id="blommor.view">
 	<div class="container-fluid">
-		<div class="col-md-3" ng-repeat="img in imgs">
-			<a href="{{img.path}}" data-lightbox="painting-set">
-				<img src="{{img.path}}" width="250px" class="img-rounded">
-			</a>
+		<div class="grid">
+			
+			<div class="grid-item" ng-repeat="img in imgs">
+				<a href="{{img.path}}" data-lightbox="painting-set">
+					<img src="{{img.path}}" width="250px" class="img-rounded">
+				</a>
+			</div>
 		</div>
 	</div>
 </div>
