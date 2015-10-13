@@ -82,6 +82,14 @@
     line-height: 60px;
 }
 
+
+
+.active:hover{
+    text-decoration: none;
+    /*color: #AAA;*/
+    background: rgba(255,255,255,0);
+}
+
 .sidebar-nav li a {
     display: block;
     text-decoration: none;
@@ -99,6 +107,12 @@
     text-decoration: none;
 }
 
+.active{
+    color: #fff;
+    background: rgba(255,255,255,1);
+    text-decoration: none;
+}
+
 .sidebar-nav > .sidebar-brand {
     height: 65px;
     font-size: 30px;
@@ -112,12 +126,6 @@
 .sidebar-nav > .sidebar-brand a:hover {
     color: #fff;
     background: none;
-}
-
-.active{
-    color: #fff;
-    background: rgba(255,255,255,1);
-    /*background: none;*/
 }
 
 @media(min-width:768px) {
