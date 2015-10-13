@@ -57,7 +57,9 @@
 			<th>Config</th>
 			<tr ng-repeat="img in imgs.slice().reverse()">
 				<td class="col-sm-2">
+					<a href="{{img.path}}" data-lightbox="img-set" data-title="{{img.title}}">
 					<img src="{{img.path}}" height="100px" class="img-rounded">
+				</a>
 				</td>
 				<td class="col-sm-2">{{img.title}}</td>
 				<td class="col-sm-2">{{img.category}}</td>

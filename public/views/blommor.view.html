@@ -3,7 +3,7 @@
 		<div class="grid">
 			
 			<div class="grid-item" ng-repeat="img in imgs">
-				<a href="{{img.path}}" data-lightbox="painting-set">
+				<a href="{{img.path}}" data-lightbox="painting-set" data-title="{{img.title}}">
 					<img src="{{img.path}}" width="250px" class="img-rounded">
 				</a>
 			</div>
