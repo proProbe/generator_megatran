@@ -2,7 +2,7 @@ var adminController = angular.module('adminController', []);
 
 adminController.controller('adminController', ['$scope', '$http', function($scope, $http){
 	$scope.user = {};
-	$scope.success = true;
+	$scope.success = false;
 	$scope.correct = true;
 	$scope.form = {};
 	$scope.logIn = function(){
