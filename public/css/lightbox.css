@@ -5,9 +5,12 @@ body:after {
 }
 
 .grid-item {
-  width: 200px;
-  margin: 30px;
+  width: 300px;
+  display:block;
+  /*margin: 30px;*/
   float: left;
+  margin-top: 10px;
+  margin-right: 10px;
 }
 
 .lightboxOverlay {
