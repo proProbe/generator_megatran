@@ -7,6 +7,7 @@ var app = angular.module('App',[
 	'vaskorController',
 	'resorController',
 	'adminController',
+	'bootstrap.fileField',
 	//Placeholder:NewModule
 	]);
 
