@@ -5,6 +5,12 @@ $('.grid').imagesLoaded(function() {
 	});
 	// $('.grid').masonry('reloadItems');
 });
+
+lightbox.option({
+      'resizeDuration': 200,
+      'wrapAround': false,
+      'fitImagesInViewport': true
+});
 // $('.grid').masonry({
 // 	itemSelector: '.grid-item',
 // 	columnWidth: 200
