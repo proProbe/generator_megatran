@@ -45,7 +45,7 @@
 			<th>Category</th>
 			<th>Description</th>
 			<th>Config</th>
-			<tr ng-repeat="img in imgs">
+			<tr ng-repeat="img in imgs.slice().reverse()">
 				<td class="col-sm-2">
 					<img src="{{img.path}}" height="100px" class="img-rounded">
 				</td>
