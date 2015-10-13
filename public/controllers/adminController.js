@@ -19,6 +19,7 @@ adminController.controller('adminController', ['$scope', '$http', function($scop
 		fd.append("file", $scope.form.uploadFile);
 		fd.append("title", $scope.form.title);
 		fd.append("category", $scope.form.category);
+		fd.append("description", $scope.form.description);
 		$http.post('/upload', fd, {
 			headers : {
 				'Content-Type' : undefined

@@ -111,12 +111,14 @@ app.post('/upload', function(req, res){
 	var tempPath;
 	var title;
 	var category;
+	var description;
 
 	form.parse(req, function(err, fields, files){
 		try{
 			tempPath = files.file.path;
 			title = fields.title;
 			category = fields.category;
+			description = fields.description;
 			form.name = title;
 		}catch(e){
 			return res.status(500).send({message:"error!!"});
@@ -146,7 +148,7 @@ app.post('/upload', function(req, res){
 			category:category,
 			title:title,
 			path: '/imgs/' + category + '/' + title,
-			description:"Test pictures"
+			description:description
 		});
 		img.save(function(err, img){
 			if(err){
