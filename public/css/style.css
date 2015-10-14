@@ -1,0 +1,8 @@
+.grid-item {
+  width: 300px;
+  display:block;
+  /*margin: 30px;*/
+  float: left;
+  margin-top: 10px;
+  margin-right: 10px;
+}

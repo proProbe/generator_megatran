@@ -7,7 +7,7 @@ $('.grid').imagesLoaded(function() {
 });
 
 lightbox.option({
-      'resizeDuration': 200,
+      'resizeDuration': 400,
       'wrapAround': false,
       'fitImagesInViewport': true
 });
