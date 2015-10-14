@@ -25,7 +25,7 @@
     background:#000;
     margin-top: 151px;
     top: -151px;
-    height:75px;
+    height:150px;
     left: 0px;
     overflow: auto;
 }
@@ -37,6 +37,7 @@
     width: 0;
     height: 100%;
     margin-left: -250px;
+    /*margin-top: 75px;*/
     overflow-y: auto;
     background: #000;
     -webkit-transition: all 0.5s ease;
@@ -52,7 +53,7 @@
 #page-content-wrapper {
     width: 100%;
     position: absolute;
-    margin-top: 75px;
+    margin-top: 150px;
     padding: 15px;
 }
 
