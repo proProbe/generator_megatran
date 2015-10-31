@@ -1,6 +1,6 @@
 var adminController = angular.module('adminController', []);
 
-adminController.controller('adminController', ['$scope', '$http', function($scope, $http){
+adminController.controller('adminController', ['$scope', '$http', '$timeout', function($scope, $http, $timeout){
 	$scope.user = {};
 	$scope.success = false;
 	$scope.correct = true;
@@ -12,6 +12,14 @@ adminController.controller('adminController', ['$scope', '$http', function($scop
 			$scope.success = false;
 			$scope.correct = false;
 		}
+	};
+
+	var resetForm = function(){
+		$timeout(function(){
+			$scope.message = "";
+			$scope.form = null;
+			$scope.previewImg = null;
+		},1000);
 	};
 
 	$scope.sendForm = function(){
@@ -28,9 +36,11 @@ adminController.controller('adminController', ['$scope', '$http', function($scop
 		})
 		.success(function(res){
 			$scope.message = res;
+			resetForm();
 		})
 		.error(function(err){
 			$scope.message = err;
+			resetForm();
 		});
 	};
 
@@ -53,7 +63,6 @@ adminController.controller('adminController', ['$scope', '$http', function($scop
 		console.log(img);
 		$http(req)
 		.success(function(response){
-			console.log(response);
 			$scope.getImgs();
 		})
 		.error(function(err){

@@ -31,7 +31,7 @@ angular.module('bootstrap.fileField',[])
         element.bind('click',function(e){
             e.preventDefault();
             fileField[0].click()
-        });        
+        });
     },
     template:'<button type="button"><ng-transclude></ng-transclude><input type="file" style="display:none"></button>',
     replace:true,
