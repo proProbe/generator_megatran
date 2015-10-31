@@ -8,6 +8,7 @@ var app = angular.module('App',[
 	'resorController',
 	'adminController',
 	'bootstrap.fileField',
+	'img.field',
 	//Placeholder:NewModule
 	]);
 

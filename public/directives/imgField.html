@@ -1,0 +1,12 @@
+<div class="grid">
+	<div class="grid-item" ng-repeat="img in imgs">
+		<a href="{{img.path}}" data-lightbox="data-set" data-title="{{img.title}}">
+			<img src="{{img.path}}-thumbnail" class="img-rounded" onload="imgOnLoad(this)">
+
+		</a>
+		<!-- <p>Date:</p> -->
+		<!-- <p>Description:</p> -->
+		<!-- <p id="paragraph">{{img.description}}</p> -->
+		<!-- <p id="paragraph">{{img.description}}</p> -->
+	</div>
+</div>

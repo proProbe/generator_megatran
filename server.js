@@ -6,12 +6,12 @@ var bodyParser = require('body-parser');
 var fs = require('fs');
 var formidable = require('formidable');
 var mongoose = require('mongoose');
-// var util = require('util');
+var im = require('imagemagick');
+
 
 //	Set all the middleware.
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
-
 
 //	Set port to 3000 if no port is specified.
 var port = process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3000;
@@ -26,6 +26,7 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
 	process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
 	process.env.OPENSHIFT_APP_NAME;
 }
+
 mongoose.connect(connection_string, function(err){
 	if(err){
 		console.log('mongodb connection error', err);
@@ -34,30 +35,29 @@ mongoose.connect(connection_string, function(err){
 	}
 });
 
-/*
-	Close the process when exiting the server.
-	Processes like db connections should be closed here.
-	*/
-	process.on('SIGINT', function() {
-		console.log('\nClosed app');
-		mongoose.connection.close(function(){
-			console.log('Closed connection to mongodb');
-		});
-		process.exit(0);
+
+// Close the process when exiting the server.
+// Processes like db connections should be closed here.
+process.on('SIGINT', function() {
+	console.log('\nClosed app');
+	mongoose.connection.close(function(){
+		console.log('Closed connection to mongodb');
 	});
+	process.exit(0);
+});
 
-	var imgModel = require('./models/img.model.js');
-	var fileFolder = __dirname;
-	if(process.env.OPENSHIFT_DATA_DIR){
-		fileFolder = process.env.OPENSHIFT_DATA_DIR;
 
-	}
+var imgModel = require('./models/img.model.js');
+var __dir = __dirname;
+if(process.env.OPENSHIFT_DATA_DIR){
+	__dir = process.env.OPENSHIFT_DATA_DIR;
+}
 
 //	Send static files when requested
 app.use('/', express.static(__dirname + '/public'));
 
 app.get('/imgs/:category/:file', function(req, res){
-	res.sendFile(fileFolder + '/imgs/'+req.params.category+'/'+req.params.file );
+	res.sendFile(__dir + '/imgs/'+req.params.category+'/'+req.params.file );
 });
 
 app.get('/imgs', function(req, res){
@@ -90,11 +90,17 @@ app.delete('/delete/:id', function(req, res){
 				if(err){
 					return res.status(500).send({message:"img remove", err:err});
 				}
-				fs.unlink(fileFolder + path, function(err){
+				fs.unlink(__dir + path, function(err){
 					if(err){
 						return res.status(500).send({message:"unlink", err:err});
 					}
-					return res.status(200).send({message:'deleted img'});
+					fs.unlink(__dir + path + '-thumbnail', function(err){
+						if(err){
+							return res.status(500).send({message:"unlink thumbnail", err:err});
+						}
+						return res.status(200).send({message:'deleted thumbnail and img'});
+					});
+					// return res.status(200).send({message:'deleted img'});
 				});
 			});
 		}
@@ -103,53 +109,73 @@ app.delete('/delete/:id', function(req, res){
 
 // app.delete('/delete')
 
+var saveImg = function(tempPath, newPath, folderPath, img){
+	if(!fs.existsSync(folderPath)){
+		fs.mkdirSync(folderPath);
+	}
+
+	if(!fs.existsSync(folderPath + '/' + img.category)){
+		fs.mkdirSync(folderPath + '/' + img.category);
+	}
+
+	fs.rename(tempPath, newPath, function(err){
+		if(err){
+			throw err;
+		}
+	});
+};
+
+var imgToThumbnail = function(w, h, sp, dp){
+	im.resize({
+		srcPath: sp,
+		dstPath: dp,
+		width: w,
+		height: h,
+	}, function(err){
+		if(err){throw err;}
+		console.log('resized it all');
+	});
+};
+
 app.post('/upload', function(req, res){
 	var form = new formidable.IncomingForm({
-		uploadDir: fileFolder
+		uploadDir: __dir
 	});
-
+	var imgMeta = {};
 	var tempPath;
-	var title;
-	var category;
-	var description;
 
 	form.parse(req, function(err, fields, files){
 		try{
 			tempPath = files.file.path;
-			title = fields.title;
-			category = fields.category;
-			description = fields.description;
-			form.name = title;
+			imgMeta.title = fields.title;
+			imgMeta.category = fields.category;
+			imgMeta.description = fields.description;
+			form.name = imgMeta.title;
 		}catch(e){
 			return res.status(500).send({message:"error!!"});
 		}
 	});
+
 	form.on('end', function(){
 		try{
 
-			var newPath = fileFolder + '/imgs/' + category +  '/' + title;
-			var pdir = fileFolder + '/imgs';
-			if(!fs.existsSync(pdir)){
-				fs.mkdirSync(pdir);
-			}
-			if(!fs.existsSync(fileFolder + '/imgs/' + category)){
-				fs.mkdirSync(fileFolder + '/imgs/' + category);
-			}
-			fs.rename(tempPath, newPath, function(err){
-				if(err){
-					// return res.status(500).send({message:err});
-					throw err;
-				}
-			});
+			var newPath = __dir + '/imgs/' + imgMeta.category +  '/' + imgMeta.title;
+			var imgFolder = __dir + '/imgs';
+
+			saveImg(tempPath, newPath, imgFolder, imgMeta);
+			imgToThumbnail(400, 200, newPath, newPath + '-thumbnail');
+
 		}catch(e){
 			return res.status(500).send({message:"error!!"});
 		}
+
 		var img = new imgModel({
-			category:category,
-			title:title,
-			path: '/imgs/' + category + '/' + title,
-			description:description
+			category:imgMeta.category,
+			title:imgMeta.title,
+			path: '/imgs/' + imgMeta.category + '/' + imgMeta.title,
+			description:imgMeta.description
 		});
+
 		img.save(function(err, img){
 			if(err){
 				return res.status(500).send({message:err});
