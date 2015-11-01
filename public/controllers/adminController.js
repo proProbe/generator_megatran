@@ -17,8 +17,8 @@ adminController.controller('adminController', ['$scope', '$http', '$timeout', fu
 	var resetForm = function(){
 		$timeout(function(){
 			$scope.message = "";
-			$scope.form = null;
-			$scope.previewImg = null;
+			$scope.form = {};
+			$scope.previewImg = "";
 		},1000);
 	};
 

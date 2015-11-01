@@ -39,7 +39,7 @@
 					<file-field class="btn btn-primary" ng-model="form.uploadFile" required="" preview="previewImg">Add File</file-field>
 				</div>
 				<div class="col-sm-2">
-					<div ng-if="previewImg" >
+					<div ng-if="form.uploadFile.name" >
 						<h4>Preview of <b>{{form.uploadFile.name}}</b></h4>
 						<img id="previewImg" ng-src="{{previewImg}}">
 					</div>
