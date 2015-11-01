@@ -27,6 +27,15 @@
   overflow: hidden;
 }
 
+.paragraphFont{
+font-family: 'Josefin Sans';
+  font-size: 17px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  line-height: 25.2px;
+}
+
 #previewImg{
   max-width:200px;
   max-height:200px;
