@@ -19,7 +19,8 @@ adminController.controller('adminController', ['$scope', '$http', '$timeout', fu
 			$scope.message = "";
 			$scope.form = {};
 			$scope.previewImg = "";
-		},1000);
+			$scope.uploading = false;
+		},2000);
 	};
 
 	$scope.sendForm = function(){
@@ -28,6 +29,7 @@ adminController.controller('adminController', ['$scope', '$http', '$timeout', fu
 		fd.append("title", $scope.form.title);
 		fd.append("category", $scope.form.category);
 		fd.append("description", $scope.form.description);
+		$scope.uploading = true;
 		$http.post('/upload', fd, {
 			headers : {
 				'Content-Type' : undefined
@@ -35,11 +37,13 @@ adminController.controller('adminController', ['$scope', '$http', '$timeout', fu
 			transformRequest : angular.identity
 		})
 		.success(function(res){
-			$scope.message = res;
+			$scope.form.msg = res;
+			$scope.form.status = "alert-success";
 			resetForm();
 		})
 		.error(function(err){
-			$scope.message = err;
+			$scope.form.msg = err;
+			$scope.form.status = "alert-warning";
 			resetForm();
 		});
 	};
@@ -47,9 +51,13 @@ adminController.controller('adminController', ['$scope', '$http', '$timeout', fu
 	$scope.getImgs = function(){
 		$http.get('/imgs')
 		.success(function(imgs){
+			$scope.imgMsg = "Got all the pictures";
+			$scope.imgStatus = "alert-success";
 			$scope.imgs = imgs;
 		})
 		.error(function(err){
+			$scope.imgMsg = err;
+			$scope.imgStatus = "alert-error";
 			console.log("error in getImgs:" + err);
 		});
 	};
