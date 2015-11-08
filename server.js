@@ -59,53 +59,7 @@ app.use('/', express.static(__dirname + '/public'));
 var User = require('./models/user.model.js')(mongoose);
 
 
-app.use('/authenticate', function(req, res){
-	// check header or url parameters or post parameters for token
-	var token = req.body.token || req.query.token || req.headers['x-access-token'];
-  	// decode token
-  	console.log(token);
-  	if (token) {
-    	// verifies secret and checks exp
-    	jwt.verify(token, app.get('superSecret'), function(err, decoded) {
-	    	if (err) {
-	    		return res.json({ success: false, message: 'Failed to authenticate token.' });
-	    	} else {
-        	// if everything is good, save to request for use in other routes
-        	req.decoded = decoded;
-        	next();
-	    	}
-		});
-	} else {
-	    // if there is no token
-	    // return an error
-	    return res.status(403).send({
-	    	success: false,
-	    	message: 'No token provided.'
-	    });
-	}
-});
 
-app.post('/authenticate', function(req, res){
-	var form = new formidable.IncomingForm();
-	form.parse(req, function(err, fields){
-		User.findOne({user:fields.user}, function(err, user){
-			if(err) return res.status(500).json({message:err});
-			if(!user){
-				return res.status(404).json({message:'no such user exists.'});
-			}else if(user){
-				if (user.password !== fields.password){
-					res.status(404).json({message:'incorrect password!'});
-				}else{
-					var token = jwt.sign(user, app.get('superSecret'),{
-						expiresInMinutes: 1440 //24h
-					});
-
-					res.status(200).json({success:true, message:"here is your token", token:token});
-				}
-			}
-		});
-	});
-});
 
 app.get('/imgs/:category/:file', function(req, res){
 	res.sendFile(__dir + '/imgs/'+req.params.category+'/'+req.params.file );
@@ -240,6 +194,56 @@ app.post('/upload', function(req, res){
 		});
 	});
 
+});
+
+app.get('/authenticate', function(req, res){
+	// check header or url parameters or post parameters for token
+	var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  	// decode token
+  	if (token) {
+    	// verifies secret and checks exp
+    	jwt.verify(token, app.get('superSecret'), function(err, decoded) {
+    		if (err) {
+    			return res.json({ success: false, message: 'Failed to authenticate token.' });
+    		} else {
+        	// if everything is good, save to request for use in other routes
+        	req.decoded = decoded;
+        	return res.status(200).send({success:true, message:'Token ok'});
+        }
+    });
+    } else {
+	    // if there is no token
+	    // return an error
+	    return res.status(403).send({
+	    	success: false,
+	    	message: 'No token provided.'
+	    });
+	}
+});
+
+app.post('/authenticate', function(req, res){
+	var user = req.body;
+	console.log(user);
+	// var form = new formidable.IncomingForm();
+	// console.log(form);
+	// form.parse(req, function(err, fields){
+		User.findOne({user:user.user}, function(err, user){
+			if(err) return res.status(500).json({message:err});
+			if(!user){
+				return res.status(401).json({message:'no such user exists.'});
+			}else if(user){
+				if (user.password !== user.password){
+					res.status(401).json({message:'incorrect password!'});
+				}else{
+					var token = jwt.sign(user, app.get('superSecret'),{
+						expiresInMinutes: 1440 //24h
+					});
+
+					res.status(200).json({success:true, message:"here is your token", token:token});
+				}
+			}
+		});
+	// });
 });
 
 

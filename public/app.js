@@ -1,6 +1,7 @@
 'use strict';
 var app = angular.module('App',[
 	'ngRoute',
+	'satellizer',
 	'homeController',
 	'blommorController',
 	'tavlorController',
@@ -9,10 +10,11 @@ var app = angular.module('App',[
 	'adminController',
 	'bootstrap.fileField',
 	'img.field',
+	'loginController',
 	//Placeholder:NewModule
 	]);
 
-app.config(['$routeProvider', function($routeProvider){
+app.config(['$routeProvider', '$authProvider', function($routeProvider, $authProvider){
 	$routeProvider
 
 	.when('/', {
@@ -38,11 +40,15 @@ app.config(['$routeProvider', function($routeProvider){
 	})
 	.when('/admin', {
 		templateUrl:'views/admin.view.html',
-		controller:'adminController'
+		controller:'adminController',
+	})
+	.when('/login', {
+		templateUrl:'views/login.view.html',
+		controller:'loginController'
 	})
 	//Placeholder:NewRoute
 	.otherwise({redirectTo: '/'});
-
+	$authProvider.loginUrl = '/authenticate';
 }]);
 
 app.controller('MainController', ['$location', function($location){

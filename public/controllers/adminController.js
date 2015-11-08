@@ -1,18 +1,22 @@
 var adminController = angular.module('adminController', []);
 
-adminController.controller('adminController', ['$scope', '$http', '$timeout', function($scope, $http, $timeout){
+adminController.controller('adminController', ['$scope', '$window', '$location','$http', '$timeout', function($scope, $window, $location,$http, $timeout){
 	$scope.user = {};
-	$scope.success = false;
 	$scope.correct = true;
 	$scope.form = {};
-	$scope.logIn = function(){
-		if ($scope.user.id === "ida" && $scope.user.pwd === "bismuth") {
-			$scope.success = true;
-		}else{
-			$scope.success = false;
-			$scope.correct = false;
+		$http({
+		method:'GET',
+		url:'/authenticate',
+		headers:{'x-access-token':$window.localStorage.satellizer_token}
+	}).success(function(res){
+		console.log(res.status);
+		if(res.status === 403){
+			return $location.path("/login");
 		}
-	};
+	}).error(function(err){
+		delete $window.localStorage.satellizer_token;
+		return $location.path("/login");
+	});
 
 	var resetForm = function(){
 		$timeout(function(){
@@ -76,5 +80,10 @@ adminController.controller('adminController', ['$scope', '$http', '$timeout', fu
 		.error(function(err){
 			console.log(err);
 		});
+	};
+
+	$scope.logout = function logout(){
+		delete $window.localStorage.satellizer_token;
+		return $location.path("/login");
 	};
 }]);
