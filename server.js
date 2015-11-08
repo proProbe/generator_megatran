@@ -6,55 +6,106 @@ var bodyParser = require('body-parser');
 var fs = require('fs');
 var formidable = require('formidable');
 var mongoose = require('mongoose');
+
 var im = require('imagemagick');
+var morgan = require('morgan');
+var config = require('./config/config.js')();
+var jwt    = require('jsonwebtoken');
 
 
 //	Set all the middleware.
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
+app.use(morgan('dev'));
+app.set('superSecret', config.secret);
 
-//	Set port to 3000 if no port is specified.
-var port = process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3000;
-var ip = process.env.OPENSHIFT_NODEJS_IP||"127.0.0.1";
 
-var connection_string = 'mongodb://127.0.0.1:27017/bismuth';
-// if OPENSHIFT env variables are present, use the available connection info:
-if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
-	connection_string = 'mongodb://'+ process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
-	process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
-	process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
-	process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
-	process.env.OPENSHIFT_APP_NAME;
-}
+var port = config.port;
+var ip = config.ip;
 
-mongoose.connect(connection_string, function(err){
+var db = config.db;
+mongoose.connect(db, function(err){
+
 	if(err){
 		console.log('mongodb connection error', err);
 	}else{
 		console.log('mongodb connection successful!');
-	}
+		// var User = require('./models/user.model.js')(mongoose);
+		// var ida = new User({
+		// 	user:'kiraii',
+		// 	password:'bismuth',
+		// 	admin:true
+		// });
+		// ida.save(function(err){
+		// 	if(err) return console.log(err);
+		// 	return console.log('saved ida');
+
+		// })
+}
 });
 
 
-// Close the process when exiting the server.
-// Processes like db connections should be closed here.
-process.on('SIGINT', function() {
-	console.log('\nClosed app');
-	mongoose.connection.close(function(){
-		console.log('Closed connection to mongodb');
-	});
-	process.exit(0);
-});
-
-
-var imgModel = require('./models/img.model.js');
+var imgModel = require('./models/img.model.js')(mongoose);
 var __dir = __dirname;
+
 if(process.env.OPENSHIFT_DATA_DIR){
 	__dir = process.env.OPENSHIFT_DATA_DIR;
 }
 
 //	Send static files when requested
 app.use('/', express.static(__dirname + '/public'));
+
+
+var User = require('./models/user.model.js')(mongoose);
+
+
+app.use('/authenticate', function(req, res){
+	// check header or url parameters or post parameters for token
+	var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  	// decode token
+  	console.log(token);
+  	if (token) {
+    	// verifies secret and checks exp
+    	jwt.verify(token, app.get('superSecret'), function(err, decoded) {
+	    	if (err) {
+	    		return res.json({ success: false, message: 'Failed to authenticate token.' });
+	    	} else {
+        	// if everything is good, save to request for use in other routes
+        	req.decoded = decoded;
+        	next();
+	    	}
+		});
+	} else {
+	    // if there is no token
+	    // return an error
+	    return res.status(403).send({
+	    	success: false,
+	    	message: 'No token provided.'
+	    });
+	}
+});
+
+app.post('/authenticate', function(req, res){
+	var form = new formidable.IncomingForm();
+	form.parse(req, function(err, fields){
+		User.findOne({user:fields.user}, function(err, user){
+			if(err) return res.status(500).json({message:err});
+			if(!user){
+				return res.status(404).json({message:'no such user exists.'});
+			}else if(user){
+				if (user.password !== fields.password){
+					res.status(404).json({message:'incorrect password!'});
+				}else{
+					var token = jwt.sign(user, app.get('superSecret'),{
+						expiresInMinutes: 1440 //24h
+					});
+
+					res.status(200).json({success:true, message:"here is your token", token:token});
+				}
+			}
+		});
+	});
+});
 
 app.get('/imgs/:category/:file', function(req, res){
 	res.sendFile(__dir + '/imgs/'+req.params.category+'/'+req.params.file );
@@ -73,6 +124,7 @@ app.get('/img/:category', function(req, res){
 		return res.status(200).json(imgs);
 	});
 });
+
 
 app.delete('/delete/:id', function(req, res){
 	var id = req.params.id;
@@ -109,19 +161,20 @@ app.delete('/delete/:id', function(req, res){
 
 // app.delete('/delete')
 
-var saveImg = function(tempPath, newPath, folderPath, img){
-	if(!fs.existsSync(folderPath)){
-		fs.mkdirSync(folderPath);
+var saveImg = function(tp, np, fp, img){
+	if(!fs.existsSync(fp)){
+		fs.mkdirSync(fp);
 	}
 
-	if(!fs.existsSync(folderPath + '/' + img.category)){
-		fs.mkdirSync(folderPath + '/' + img.category);
+	if(!fs.existsSync(fp + '/' + img.category)){
+		fs.mkdirSync(fp + '/' + img.category);
 	}
 
-	fs.rename(tempPath, newPath, function(err){
+	fs.rename(tp, np, function(err){
 		if(err){
 			throw err;
 		}
+		console.log('saved img');
 	});
 };
 
@@ -132,7 +185,9 @@ var imgToThumbnail = function(w, h, sp, dp){
 		width: w,
 		height: h,
 	}, function(err){
-		if(err){throw err;}
+		if(err){
+			throw err;
+		}
 		console.log('resized it all');
 	});
 };
@@ -163,6 +218,7 @@ app.post('/upload', function(req, res){
 			var imgFolder = __dir + '/imgs';
 
 			saveImg(tempPath, newPath, imgFolder, imgMeta);
+
 			imgToThumbnail(400, 200, newPath, newPath + '-thumbnail');
 
 		}catch(e){
@@ -176,7 +232,7 @@ app.post('/upload', function(req, res){
 			description:imgMeta.description
 		});
 
-		img.save(function(err, img){
+		img.save(function(err){
 			if(err){
 				return res.status(500).send({message:err});
 			}
@@ -186,8 +242,17 @@ app.post('/upload', function(req, res){
 
 });
 
+
 //	Initiate the app.
 app.listen(port, ip);
+
+process.on('SIGINT', function() {
+	console.log('\nClosed app');
+	mongoose.connection.close(function(){
+		console.log('Closed connection to mongodb');
+	});
+	process.exit(0);
+});
 
 console.log('Current App name: ' + 'Bismuth');
 console.log('Listening to port ' + port);
