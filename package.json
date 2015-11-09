@@ -22,8 +22,8 @@
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
   },
-  "scripts":{
-    "start": "node node_modules/.bin/webpack-dev-server --content-base public"
+  "scripts": {
+    "start": "node node_modules/.bin/webpack-dev-server --content-base public/ --hot"
   },
   "dependencies": {
     "body-parser": "~1.12.4",
@@ -40,6 +40,7 @@
     "gulp-util": "^3.0.7",
     "jshint-stylish": "^2.0.1",
     "morgan": "^1.6.1",
+    "raw-loader": "^0.5.1",
     "webpack": "^1.12.3",
     "webpack-dev-server": "^1.12.1"
   },

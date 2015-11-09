@@ -1,9 +1,9 @@
 module.exports = function(ngModule){
-	ngModule.controller('tavlorController', ['$scope', '$http', function($scope, $http){
+	ngModule.controller('resorController', ['$scope', '$http', function($scope, $http){
 		$scope.imgs = [];
 		$http({
 			method:'GET',
-			url:'/img/tavlor'
+			url:'/img/resor'
 		})
 		.success(function(imgs){
 			$scope.imgs = imgs;

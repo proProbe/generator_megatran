@@ -1,13 +1,32 @@
+var webpack = require('webpack');
+var path = require('path');
+var APP = __dirname + '/public';
+
 module.exports = {
-	context: __dirname + '/public',
-	entry: './index.js',
+	context: APP,
+	// entry: './index.js',
 	output: {
-		path: __dirname + '/public',
+		path: APP,
 		filename: 'bundle.js'
+	},
+	entry:{
+		app:['webpack/hot/dev-server', './index.js']
 	},
 	module:{
 		loaders:[
-			
+		{test: /\.html$/, loader: 'raw', exclude: /node_modules/},
+		// {test: /\.js$/, loader: 'ng-annotate'}
 		]
-	}
+	},
+	resolve:{
+		root: path.resolve(APP + '/libs'),
+		extensions: ['', '.js']
+	},
+	plugins:[
+	// new Webpack.ProvidePlugin({
+	// 	// $: "./libs/jquery/dist/jquery.js",
+	// 	// jQuery: "./libs/jquery/dist/jquery.js",
+	// 	// "window.jQuery": "./libs/jquery/dist/jquery.js"
+	// }),
+	],
 };
