@@ -14,7 +14,7 @@ var SectionGenerator = yeoman.generators.Base.extend({
 		var prompts = [{
 			name: 'ctrlName',
 			message: 'What is your controller\'s name ?',
-			default: 'testController'
+			default: 'test.controller'
 		}];
 
 		this.prompt(prompts, function (props) {

@@ -13,7 +13,7 @@ module.exports = yeoman.generators.Base.extend({
     var prompts = [{
       name: 'viewName',
       message: 'What is your view\'s name ?',
-      default: 'testView'
+      default: 'test.view'
     }];
 
     this.prompt(prompts, function (props) {
@@ -36,14 +36,13 @@ module.exports = yeoman.generators.Base.extend({
     this.fs.copy('public/app.js', 'public/app.js', {
       process: function(content){
         var pathString = [
-          ".when('/path/" + context.view_name + "', {\r",
+          "\t.when('/path/" + context.view_name + "', {\r",
           "\t\ttemplateUrl:'views/" + context.view_name + ".html',\r",
           "\t\tcontroller:'insertController'\r",
           "\t})"
         ].join('');
-        var re = new RegExp('//Placeholder:NewRoute', 'g');
-        console.log(pathString);
-        var newContent = content.toString().replace(re, pathString + '\n\t//Placeholder:NewRoute');
+        var re = new RegExp('(\\$routeProvider[\\n\\s\\t])');
+        var newContent = content.toString().replace(re, '$1' + pathString + '\n\t');
         return newContent;
       }
     });
