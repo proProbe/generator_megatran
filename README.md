@@ -34,6 +34,11 @@ Angular.Controllers
 yo megatran:controllers
 ```
 
+Default gulp runs nodemon and browser-sync:
+```bash
+gulp
+```
+
 ## License
 
 MIT
