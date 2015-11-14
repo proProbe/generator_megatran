@@ -52,6 +52,7 @@ module.exports = yeoman.generators.Base.extend({
 
     this.copy("_bowerrc", ".bowerrc");
     this.copy("_gulpfile.js", "gulpfile.js");
+    this.copy("_config.js", "config/config.js");
     this.template("_bower.json", "bower.json", context);
     this.template("_server.js", "server.js", context);
     this.template("_package.json", "package.json", context);

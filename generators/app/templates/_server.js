@@ -1,17 +1,19 @@
-
+'use strict';
 //	Require the necessary packages
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var morgan = require('morgan');
+var config = require('./config/config.js')();
 
-	
+
 //	Set all the middleware.
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
-
+app.use(morgan('dev'));
 
 //	Set port to 3000 if no port is specified.
-var port = process.env.PORT||3000;
+var port = process.env.PORT||config.port;
 
 
 /*

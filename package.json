@@ -1,6 +1,6 @@
 {
   "name": "generator-megatran",
-  "version": "0.1",
+  "version": "",
   "description": "Generator based on yeoman. Uses angular and nodejs",
   "license": "MIT",
   "main": "app/index.js",

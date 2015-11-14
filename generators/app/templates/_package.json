@@ -17,7 +17,8 @@
   "gulp": "^3.9.0",
   "gulp-nodemon": "^2.0.4",
   "gulp-util": "^3.0.7",
-  "morgan": "^1.6.1"
+  "morgan": "^1.6.1",
+  "browser-sync": "^2.9.12"
   },
   "bundleDependencies": [],
   "private": true,
