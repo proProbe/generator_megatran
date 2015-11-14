@@ -1,14 +1,14 @@
 {
   "name": "generator-megatran",
-  "version": "0.0.0",
-  "description": "Yeoman generator",
+  "version": "0.1",
+  "description": "Generator based on yeoman. Uses angular and nodejs",
   "license": "MIT",
   "main": "app/index.js",
-  "repository": "someuser/generator-megatran",
+  "repository": "https://github.com/proProbe/generator-megatran",
   "author": {
-    "name": "",
-    "email": "",
-    "url": "https://github.com/someuser"
+    "name": "Huy Tran",
+    "email": "work.huy.tran@gmail.com",
+    "url": "https://github.com/proProbe"
   },
   "scripts": {
     "test": "mocha"

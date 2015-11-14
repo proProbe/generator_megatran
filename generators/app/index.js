@@ -49,7 +49,7 @@ module.exports = yeoman.generators.Base.extend({
       site_name: this.appName,
       site_description: this.appDescription
     };
-    
+
     this.copy("_bowerrc", ".bowerrc");
     this.copy("_gruntfile.js", "gruntfile.js");
     this.template("_bower.json", "bower.json", context);

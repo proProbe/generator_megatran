@@ -36,7 +36,7 @@ var SectionGenerator = yeoman.generators.Base.extend({
     };
     this.fs.copy('public/index.html', 'public/index.html', {
       process: function(content){
-        var srcString = '<script src="controllers/' + context.ctrl_name + '.js"></script>'
+        var srcString = '<script src="controllers/' + context.ctrl_name + '.js"></script>';
         var re = new RegExp('<!-- Placeholder:NewSrc -->', 'g');
         var newContent = content.toString().replace(re, srcString + '\n\t<!-- Placeholder:NewSrc -->');
         return newContent;

@@ -40,7 +40,7 @@ module.exports = yeoman.generators.Base.extend({
           "\t\ttemplateUrl:'views/" + context.view_name + ".html',\r",
           "\t\tcontroller:'insertController'\r",
           "\t})"
-        ].join('')
+        ].join('');
         var re = new RegExp('//Placeholder:NewRoute', 'g');
         console.log(pathString);
         var newContent = content.toString().replace(re, pathString + '\n\t//Placeholder:NewRoute');
