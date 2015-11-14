@@ -13,7 +13,7 @@ module.exports = yeoman.generators.Base.extend({
     var prompts = [{
       name: 'viewName',
       message: 'What is your view\'s name ?',
-      default: 'test.view'
+      default: 'testView'
     }];
 
     this.prompt(prompts, function (props) {

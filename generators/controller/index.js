@@ -13,8 +13,8 @@ var SectionGenerator = yeoman.generators.Base.extend({
 
 		var prompts = [{
 			name: 'ctrlName',
-			message: 'What is your controller\'s name ?',
-			default: 'test.controller'
+			message: 'What is your controller\'s name?',
+			default: 'testController'
 		}];
 
 		this.prompt(prompts, function (props) {
@@ -45,7 +45,7 @@ var SectionGenerator = yeoman.generators.Base.extend({
 		this.fs.copy('public/app.js', 'public/app.js', {
 		  process: function(content){
 		    var moduleString = "\n\t'"+context.ctrl_name + "'";
-		    var re = new RegExp('(angular.module[(][\'\\w]+,[\[\t\n]*)([\'\\w\t\n,]*\')([\n\t]*\\]\\);)');
+		    var re = new RegExp('(angular.module[(][\'\\w]+,[\[\t\n]*)([\'\\w\t\n\.,]*\')([\n\t]*\\]\\);)');
 		    var newContent = content.toString().replace(re, '$1' + '$2,' + moduleString + '$3');
 		    return newContent;
 		  }
