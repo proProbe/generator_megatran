@@ -1,5 +1,5 @@
 # generator-megatran
-A lightweight and barebone generator that uses NodeJS, ExpressJS and AngularJS. Has currently support for generating angular views and controllers. Also uses gulp with nodemon and browsersync.
+A lightweight and barebone generator that uses yeomans generator to create an app based on NodeJS, ExpressJS and AngularJS. Has currently support for generating angular views and controllers. Also uses gulp with nodemon and browsersync.
 > [Yeoman](http://yeoman.io) generator
 
 ## Getting Started
