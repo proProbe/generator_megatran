@@ -1,6 +1,7 @@
 'use strict';
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
+var ast = require('ast-query');
 
 module.exports = yeoman.generators.Base.extend({
   promptUserDialog: function() {
