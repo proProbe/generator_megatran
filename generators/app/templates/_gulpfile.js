@@ -23,10 +23,15 @@ gulp.task('nodemon', function(cb){
 
 	return nodemon({
 		script:'server.js',
-	}).on('start', function(){
+	})
+	.on('start', function(){
 		if(!started){
 			cb();
 			started=true;
 		}
+	})
+	.on('exit', function(){
+		gutil.log('Exit nodemon');
+		process.exit();
 	});
 });
