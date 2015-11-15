@@ -39,11 +39,11 @@ module.exports = yeoman.generators.Base.extend({
         var pathString = [
           "\t.when('/path/" + context.view_name + "', {\r",
           "\t\ttemplateUrl:'views/" + context.view_name + ".html',\r",
-          "\t\tcontroller:'insertController'\r",
+          "\t\tcontroller:'insertController'\n",
           "\t})"
         ].join('');
         var re = new RegExp('(\\$routeProvider[\\n\\s\\t])');
-        var newContent = content.toString().replace(re, '$1' + pathString + '\n\t');
+        var newContent = content.toString().replace(re, '$1' + pathString + '\r');
         return newContent;
       }
     });
