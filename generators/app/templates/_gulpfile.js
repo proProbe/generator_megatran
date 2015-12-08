@@ -4,6 +4,8 @@ var gutil = require('gulp-util');
 var nodemon = require('gulp-nodemon');
 var browserSync = require('browser-sync').create();
 
+var BROWSER_SYNC_RELOAD_DELAY = 2000;
+
 
 gulp.task('default', ['browser-sync'], function(){
 	return gutil.log('Gulp is running');
@@ -29,9 +31,11 @@ gulp.task('nodemon', function(cb){
 			cb();
 			started=true;
 		}
-	})
-	.on('exit', function(){
-		gutil.log('Exit nodemon');
-		process.exit();
+	}).on('restart', function onRestart(){
+		setTimeout(function reload() {
+			browserSync.reload({
+				stream: false
+			});
+		}, BROWSER_SYNC_RELOAD_DELAY);
 	});
 });
