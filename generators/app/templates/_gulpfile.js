@@ -17,6 +17,7 @@ gulp.task('browser-sync', ['nodemon'], function(){
 		files:["public/"],
 		// browser: "google chrome",
 		port:4000,
+		reloadDelay: BROWSER_SYNC_RELOAD_DELAY
 	});
 });
 
@@ -32,10 +33,6 @@ gulp.task('nodemon', function(cb){
 			started=true;
 		}
 	}).on('restart', function onRestart(){
-		setTimeout(function reload() {
-			browserSync.reload({
-				stream: false
-			});
-		}, BROWSER_SYNC_RELOAD_DELAY);
+		browserSync.reload();
 	});
 });
