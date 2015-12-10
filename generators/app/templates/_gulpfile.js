@@ -26,6 +26,7 @@ gulp.task('nodemon', function(cb){
 
 	return nodemon({
 		script:'server.js',
+		ignore: ["public/"]
 	})
 	.on('start', function(){
 		if(!started){
