@@ -1,6 +1,7 @@
 'use strict';
-var <%= ctrl_name %> = angular.module('<%= ctrl_name %>', []);
+(function(){
+	angular.module('<%= ctrl_name %>', [])
+	.controller('<%= ctrl_name %>', [function(){
 
-<%= ctrl_name %>.controller('<%= ctrl_name %>', [function(){
-
-}]);
+	}]);
+})();
